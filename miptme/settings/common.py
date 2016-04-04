@@ -47,6 +47,10 @@ DEFAULT_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'apps.reddit',
+    'bootstrap_themes',
+    'bootstrap3',
+    'mptt',
 ]
 
 # Middlewares
@@ -119,8 +123,8 @@ DEBUG = False
 
 # ##### INTERNATIONALIZATION ##############################
 
-LANGUAGE_CODE = 'de'
-TIME_ZONE = 'Europe/Berlin'
+LANGUAGE_CODE = 'ru'
+TIME_ZONE = 'Europe/Moscow'
 
 # Internationalization
 USE_I18N = True

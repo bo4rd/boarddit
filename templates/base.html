@@ -1,0 +1,34 @@
+{% load bootstrap_themes %}
+
+<!doctype html>
+<html>
+        <head>
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+            <title>
+                {% block title %}
+                {% endblock %}
+            </title>
+            {% bootstrap_styles theme='readable' type='css' %}
+            {% bootstrap_script use_min=False %}
+        </head>
+        <body>
+            <!-- Static navbar -->
+      <nav class="navbar navbar-default">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="{% url 'apps.reddit.views.index' %}">Boarddit</a>
+            <a class="navbar-brand" href="/admin/">Admin</a>
+          </div>
+        </div><!--/.container-fluid -->
+      </nav>
+
+            <div class="container">
+                <div class="page-header">
+                    {% block header %}
+                    {% endblock %}
+                </div>
+                {% block content %}
+                {% endblock %}
+            </div>
+        </body>
+    </html>
