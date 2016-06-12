@@ -1,14 +1,11 @@
-{% extends "base.html" %}
+{% extends "base_with_sidemenu.html" %}
 {% load mptt_tags %}
 
 {% block title %}MIPT board{% endblock %}
 
-{% block header %}
-{% endblock %}
-
-{% block content %}
+{% block sidecontent %}
     {% for thread in threads%}
-        <h2><a href="{{ thread.url }}">{{ thread.title }}</a></h2>
+        <h2><a href="{{ thread.real_url }}">{{ thread.title }}</a></h2>
         <a href="{{ thread.permalink }}">Комментариев: {{ thread.get_comment_number }}</a>, создан {{ thread.created_on }}
     {% endfor %}
 {% endblock %}

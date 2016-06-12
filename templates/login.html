@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Login to MIPT board{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+    <h1>Авторизация</h1>
+</div>
+
+{% if form.errors %}
+<div class="row">
+    <span class="alert alert-danger">Неправильный логин и/или пароль!</span>
+</div>
+{% endif %}
+
+<div class="row">
+<form method="POST" action="{% url "login" %}">
+    {% csrf_token %}
+    {{ form.username.label_tag }}<br>{{ form.username }}<br>
+    {{ form.password.label_tag }}<br>{{ form.password }}<br>
+    <br>
+    <input type="submit" value="Войти">
+    <input type="hidden" name="next" value="{{ next }}">
+</form>
+</div>
+{% endblock %}

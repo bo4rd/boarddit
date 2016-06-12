@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Register at MIPT board{% endblock %}
+
+{% block header %}
+<h1>Регистрация нового пользователя</h1>
+{% endblock %}
+
+{% block content %}
+
+{% if form.errors %}
+<div class="row">
+    <span class="alert alert-danger">Ошибка регистрации!</span>
+</div>
+{% endif %}
+
+<div class="row">
+<form method="POST" action="">
+    {% csrf_token %}
+    {{ form.as_p }}<br>
+    <input type="submit" value="Зарегистрироваться">
+    <input type="hidden" name="next" value="{{ next }}">
+</form>
+</div>
+{% endblock %}

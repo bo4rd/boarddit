@@ -26,6 +26,10 @@ class Thread(Model):
         return comment_num
 
     @property
+    def real_url(self):
+        return self.url if self.url else self.permalink
+
+    @property
     def permalink(self):
         return reverse('apps.reddit.views.show_thread', kwargs={'thread_id': self.id})
 

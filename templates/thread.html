@@ -1,16 +1,16 @@
-{% extends "base.html" %}
+{% extends "base_with_sidemenu.html" %}
 {% load mptt_tags %}
 
 {% block title %}MIPT board{% endblock %}
 
-{% block header %}
-    <h1>{{ thread.title }}</h1>
-    <span class="text-muted">Создан {{ thread.created_on }} пользователем {{ thread.author.get_username }}</span>
+{% block sidecontent %}
+    <div class="page-header">
+        <h1>{{ thread.title }}</h1>
+        <span class="text-muted">Создан {{ thread.created_on }} пользователем {{ thread.author.get_username }}</span>
 
-    <p style="margin-top: 2em;">{{ thread.text }}</p>
-{% endblock %}
+        <p style="margin-top: 2em;">{{ thread.text }}</p>
+    </div>
 
-{% block content %}
     {% recursetree nodes %}
     {% if node.thread == thread %}
         <li>

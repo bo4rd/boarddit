@@ -48,6 +48,7 @@ DEFAULT_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'apps.reddit',
+    'apps.accounts',
     'bootstrap_themes',
     'bootstrap3',
     'mptt',
@@ -84,6 +85,8 @@ TEMPLATES = [
         },
     },
 ]
+
+LOGIN_URL = '/login/'
 
 
 # ##### SECURITY CONFIGURATION ############################
