@@ -4,22 +4,11 @@
 {% block title %}MIPT board{% endblock %}
 
 {% block header %}
-        <h1>БОРДАААА</h1>
-        {% for thread in threads%}
-        <h2>{{ thread.title }}</h2>
-        {% recursetree nodes %}
-        {% if node.thread == thread %}
-            <li>
-                {{ node.text }}<br><strong>{{ node.author }}</strong>
-                <ul class="children">
-                    {{ children }}
-                </ul>
-            </li>
-        {% endif %}
-        {% endrecursetree %}
-        {% endfor %}
 {% endblock %}
 
 {% block content %}
-
+    {% for thread in threads%}
+        <h2><a href="{{ thread.url }}">{{ thread.title }}</a></h2>
+        <a href="{{ thread.permalink }}">Комментариев: {{ thread.get_comment_number }}</a>, создан {{ thread.created_on }}
+    {% endfor %}
 {% endblock %}

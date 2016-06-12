@@ -8,4 +8,6 @@ urlpatterns = patterns('',
 
     url(r'^$', 'apps.reddit.views.index', name='index'),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^thread/(?P<thread_id>[0-9]+)/$', 'apps.reddit.views.show_thread',
+        name='thread'),
 )

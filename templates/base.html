@@ -8,7 +8,7 @@
                 {% block title %}
                 {% endblock %}
             </title>
-            {% bootstrap_styles theme='readable' type='css' %}
+            {% bootstrap_styles theme='default' type='css' %}
             {% bootstrap_script use_min=False %}
         </head>
         <body>
@@ -17,8 +17,13 @@
         <div class="container-fluid">
           <div class="navbar-header">
             <a class="navbar-brand" href="{% url 'apps.reddit.views.index' %}">Boarddit</a>
-            <a class="navbar-brand" href="/admin/">Admin</a>
           </div>
+          <ul class="nav navbar-nav">
+              <li><a href="/admin/">Admin</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+              <li><a href="/login/">Login</a></li>
+          </ul>
         </div><!--/.container-fluid -->
       </nav>
 

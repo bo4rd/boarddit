@@ -1,6 +1,7 @@
 from django.db.models import *
 from django.contrib.auth.models import User
 from django.utils.encoding import python_2_unicode_compatible
+from django.core.urlresolvers import reverse
 from mptt.models import MPTTModel, TreeForeignKey
 
 @python_2_unicode_compatible
@@ -16,6 +17,17 @@ class Thread(Model):
     def __str__(self):
         short_text = self.title if len(self.title) < 20 else self.title[:18] + '...'
         return '{} by {}'.format(short_text, self.author)
+
+    @property
+    def get_comment_number(self):
+        root_comments = Comment.objects.root_nodes().filter(thread=self)
+        comment_num = len(root_comments) + sum([comment.children.all().count()
+                                                for comment in root_comments])
+        return comment_num
+
+    @property
+    def permalink(self):
+        return reverse('apps.reddit.views.show_thread', kwargs={'thread_id': self.id})
 
 
 @python_2_unicode_compatible
