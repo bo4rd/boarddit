@@ -13,6 +13,6 @@ urlpatterns = patterns('',
     url(r'^login/', 'apps.accounts.views.login', name='login'),
     url(r'^logout/$', 'apps.accounts.views.logout', name='logout'),
     url(r'^register/$', 'apps.accounts.views.register', name='register'),
-    url(r'^thread/create/$', 'apps.reddit.views.create_thread',
-        name='create_thread'),
+    url(r'^thread/create/$', 'apps.reddit.views.create_thread', name='create_thread'),
+    url(r'^user/(?P<username>[a-zA-Z0-9]+)/$', 'apps.reddit.views.user_profile', name='user_profile')
 )

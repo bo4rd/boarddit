@@ -22,7 +22,7 @@
           </ul>
           <ul class="nav navbar-nav navbar-right">
               {% if user.is_authenticated %}
-                  <li><a href="#"><strong>{{ user }}</strong></a></li>
+              <li><a href="{% url 'user_profile' user.get_username %}"><strong>{{ user }}</strong></a></li>
                   <li><a href="{% url 'logout' %}">Выйти</a></li>
               {% else %}
                   <li><a href="{% url 'register' %}">Зарегистрироваться</a></li>

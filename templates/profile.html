@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %} User profile {% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Профиль пользователя <strong>{{ profile_user.get_username }}</strong></h1>
+</div>
+{% if user.is_authenticated %}
+<div class="row">
+    <div class="col-lg-3"><strong>Электронная почта:</strong></div>
+    <div class="col-lg-9">{{ profile_user.email }}</div>
+</div>
+{% endif %}
+<div class="row">
+    <div class="col-lg-3"><strong>Дата регистрации:</strong></div>
+    <div class="col-lg-9">{{ profile_user.date_joined }}</div>
+</div>
+<div class="row">
+    <div class="col-lg-3"><strong>Тредов:</strong></div>
+    <div class="col-lg-9">{{ threads|length }}</div>
+</div>
+<div class="row">
+    <div class="col-lg-3"><strong>Комментариев:</strong></div>
+    <div class="col-lg-9">{{ comment_num }}</div>
+</div>
+
+<h2>Созданные треды</h2>
+{% for thread in threads %}
+<p>
+    <a href="{% url 'thread' thread.id %}">{{ thread.title }}</a>
+    <span class='text-muted'>{{ thread.created_on }}</span>
+</p>
+{% endfor %}
+{% endblock %}

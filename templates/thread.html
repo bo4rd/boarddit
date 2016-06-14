@@ -5,7 +5,13 @@
 
 {% block sidecontent %}
     <div class="page-header">
-        <h1>{{ thread.title }}</h1>
+        <h1>
+            {% if thread.url %}
+            <a href="{{ thread.real_url }}">{{ thread.title }}</a>
+            {% else %}
+            {{ thread.title }}
+            {% endif %}
+        </h1>
         <span class="text-muted">Создан {{ thread.created_on }} пользователем {{ thread.author.get_username }}</span>
 
         <p style="margin-top: 2em;">{{ thread.text }}</p>
