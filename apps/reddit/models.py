@@ -36,13 +36,13 @@ class Thread(Model):
 
 @python_2_unicode_compatible
 class Comment(MPTTModel):
-    text    = TextField(default = '', max_length = 10000)
-    author  = ForeignKey(User, related_name = 'author_of')
+    text    = TextField(blank=False, max_length=10000)
+    author  = ForeignKey(User, related_name='author_of')
     parent  = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True)
     thread = ForeignKey(Thread)
 
-    created_on = DateTimeField(auto_now_add = True)
-    updated_on = DateTimeField(auto_now = True)
+    created_on = DateTimeField(auto_now_add=True)
+    updated_on = DateTimeField(auto_now=True)
 
     votes = IntegerField(default=1)
 

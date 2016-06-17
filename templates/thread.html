@@ -19,12 +19,81 @@
 
     {% recursetree nodes %}
     {% if node.thread == thread %}
-        <li>
-            {{ node.text }}<br><strong>{{ node.author }}</strong>
-            <ul class="children">
-                {{ children }}
-            </ul>
-        </li>
+        {% if node.get_ancestors|length < 10 %}
+        <div class="row comment-row">
+            <div class="col-lg-offset-{{ node.get_ancestors|length }} col-lg{{ node.get_ancestors|length|add:"-12" }}" id="{{ node.id }}">
+                {{ node.text }}<br>
+                <strong>{{ node.author }}</strong> {{ node.created_on }}
+                <a class="comment_reply" href="#">ответить</a><br>
+            </div>
+        </div>
+        {{ children }}
+
+        {% elif node.get_ancestors|length == 10 %}
+        <div class="row">
+            <div class="col-lg-5 bg-info">Часть нити скрыта</div>
+        </div>
+        {% else %}
+        {% endif %}
     {% endif %}
     {% endrecursetree %}
+
+    <script>
+        $(document).ready(function() {
+            var reply_form = '<div class="reply-form">' +
+                '<textarea class="form-control"></textarea>' +
+                '<button class="btn btn-primary">Отправить</button>' +
+                '</div>';
+            var loading_msg = '<div class="bg-info">Loading...</div>';
+
+            function process_reply(parent_div) {
+                var reply_div = parent_div.children('div.reply-form');
+
+                // send reply
+                reply_div.children('button').click(function() {
+                    var comment_text = reply_div.children('textarea').val();
+                    var parent_id;
+                    if(parent_div.attr('class') == 'root-comment') {
+                        parent_id = 0;
+                    }
+                    else {
+                        parent_id = parent_div.attr('id');
+                    }
+
+                    $.post('{{ thread.permalink|escapejs }}',
+                           {
+                               text: comment_text,
+                               ancestor: parent_id
+                           },
+                           function(data, status) {
+                               if(status != 'success') {
+                                   alert('Ошибка при отправке комментария!');
+                               }
+                               else {
+                                   reply_div.remove();
+                                   parent_div.append(loading_msg);
+                                   window.location.reload(true);
+                               }
+                           });
+                });
+            }
+
+            // Root comments
+            $("div.page-header").append('<div class="root-comment"><h4>Прокомментировать</h4>' + reply_form + '</div>');
+            process_reply($("div.root-comment"));
+
+            // Replies to comments
+            $("a.comment_reply").click(function() {
+                var parent_div = $(this).parent();
+
+                if(parent_div.children('div.reply-form').length > 0) {
+                    parent_div.children('div.reply-form').remove();
+                }
+                else {
+                    parent_div.append(reply_form);
+                    process_reply(parent_div);
+                }
+            });
+        })
+    </script>
 {% endblock %}
