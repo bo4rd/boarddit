@@ -3,11 +3,15 @@ Boarddit - reddit-style борда МФТИ
 
 Для работы требуются пакеты:
 
- - django (1.8+)
- - django-extensions
- - django-mtpp
- - django-bootstrap3
- - django-bootstrap-themes
+- django >= 1.8
+- django-extensions
+- django-mtpp
+- django-bootstrap3
+- django-bootstrap-themes
+- unicode-slugify
+
+Подготовка БД::
+    python manage.py migrate
 
 Запуск тестового сервера::
 

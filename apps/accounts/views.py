@@ -1,7 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth.models import User
 from django.contrib import auth
 from django.http import HttpResponseRedirect
+from ..reddit.models import Thread, Comment
 
 def login(request):
     form = AuthenticationForm()
@@ -31,3 +33,11 @@ def register(request):
         form = UserCreationForm()
 
     return render(request, 'register.html', {'form': form})
+
+def user_profile(request, username):
+    user = get_object_or_404(User, username=username)
+    user_threads = Thread.objects.filter(author=user).order_by('-created_on')[:5]
+    comment_num = Comment.objects.filter(author=user).count()
+    return render(request, 'profile.html', {'profile_user': user, 'threads':
+                                            user_threads, 'comment_num':
+                                            comment_num})

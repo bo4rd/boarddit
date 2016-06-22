@@ -9,6 +9,9 @@ Boarddit{% if current_subreddit %} - {{ current_subreddit.title }}{% endif %}
     {% for thread in threads %}
     <h2><a href="{{ thread.real_url }}">{{ thread.title }}</a></h2>
     <a href="{{ thread.permalink }}">Комментариев: {{ thread.get_comment_number }}</a>, создан {{ thread.created_on }}
+    {% if not current_subreddit %}
+    в сообществе <a href="{% url 'show_subreddit' thread.subreddit.id thread.subreddit.slug %}">"{{ thread.subreddit.title }}"</a>
+    {% endif %}
     {% endfor %}
 </div>
 {% endblock %}

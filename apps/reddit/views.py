@@ -63,12 +63,3 @@ def show_subreddit(request, subreddit_id, subreddit_slug):
     return render(request, 'thread_list.html', {'subreddits': Subreddit.objects.all(),
                                                 'current_subreddit': subreddit,
                                                 'threads': threads})
-
-
-def user_profile(request, username):
-    user = User.objects.get(username=username)
-    user_threads = Thread.objects.filter(author=user).order_by('-created_on')[:5]
-    comment_num = Comment.objects.filter(author=user).count()
-    return render(request, 'profile.html', {'profile_user': user, 'threads':
-                                            user_threads, 'comment_num':
-                                            comment_num})

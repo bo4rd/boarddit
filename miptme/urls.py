@@ -14,6 +14,6 @@ urlpatterns = patterns('',
     url(r'^login/', 'apps.accounts.views.login', name='login'),
     url(r'^logout/$', 'apps.accounts.views.logout', name='logout'),
     url(r'^register/$', 'apps.accounts.views.register', name='register'),
-    url(r'^user/(?P<username>[a-zA-Z0-9]+)/$', 'apps.reddit.views.user_profile', name='user_profile'),
+    url(r'^user/(?P<username>[a-zA-Z0-9]+)/$', 'apps.accounts.views.user_profile', name='user_profile'),
     url(r'^r/(?P<subreddit_id>[0-9]+)/(?P<subreddit_slug>[a-zA-Z0-9_\~\-]+)/', include(subreddit_patterns))
 )

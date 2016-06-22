@@ -8,11 +8,12 @@
     <div class="col-lg-3">
         <div class="panel panel-default">
             {% if current_subreddit %}
-            <div class="panel-heading">{{ current_subreddit.title }}</div>
+            <div class="panel-heading"><a href="{% url 'show_subreddit' current_subreddit.id current_subreddit.slug %}">{{ current_subreddit.title }}</a></div>
             <div class="panel-body">
                 <h5>Описание:</h5>
                 <p>{{ current_subreddit.desc }}</p>
-                <a href="{% url 'create_thread' current_subreddit.id current_subreddit.slug %}" class="btn btn-default">Создать тред</a><br><br>
+                <h5>Создан {{ current_subreddit.created_on }}</h5>
+                <a href="{% url 'create_thread' current_subreddit.id current_subreddit.slug %}" class="btn btn-default">Создать тред</a>
             </div>
             {% else %}
             <div class="panel-heading">Все сообщества</div>
