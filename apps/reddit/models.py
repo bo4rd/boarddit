@@ -59,10 +59,7 @@ class Thread(Model):
 
     @property
     def get_comment_number(self):
-        root_comments = Comment.objects.root_nodes().filter(thread=self)
-        comment_num = len(root_comments) + sum([comment.children.all().count()
-                                                for comment in root_comments])
-        return comment_num
+        return Comment.objects.filter(thread=self).count()
 
     @property
     def real_url(self):
