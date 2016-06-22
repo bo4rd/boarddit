@@ -1,6 +1,5 @@
 from django.db.models import *
 from django.contrib.auth.models import User
-from django.utils.encoding import python_2_unicode_compatible
 from django.core.urlresolvers import reverse
 from django.utils.http import urlquote
 from mptt.models import MPTTModel, TreeForeignKey
@@ -12,7 +11,6 @@ COMMENT_MAXLEN = DESC_MAXLEN
 URL_MAXLEN = 1024
 SHORT_NAME_LEN = 20
 
-@python_2_unicode_compatible
 class Subreddit(Model):
     title = TextField(blank=False, max_length=TITLE_MAXLEN, unique=True)
     desc = TextField(blank=False, max_length=DESC_MAXLEN)
@@ -20,10 +18,10 @@ class Subreddit(Model):
     created_on = DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return u'Subreddit "{}"'.format(self.title)
+        return 'Subreddit "{}"'.format(self.title)
 
     def __repr__(self):
-        return u'<Subreddit {}>'.format(self.id)
+        return '<Subreddit {}>'.format(self.id)
 
     @property
     def slug(self):
@@ -38,7 +36,6 @@ class Subreddit(Model):
         return sn
 
 
-@python_2_unicode_compatible
 class Thread(Model):
     author = ForeignKey(User)
     title = TextField(blank=False, max_length=TITLE_MAXLEN)
@@ -51,7 +48,7 @@ class Thread(Model):
 
     def __str__(self):
         short_text = self.title if len(self.title) < 20 else self.title[:18] + '...'
-        return u'{} by {}'.format(short_text, self.author)
+        return '{} by {}'.format(short_text, self.author)
 
     def __repr__(self):
         return '<Thread {}>'.format(self.id)
@@ -79,7 +76,6 @@ class Thread(Model):
                                                                 'subreddit_slug': self.subreddit.slug})
 
 
-@python_2_unicode_compatible
 class Comment(MPTTModel):
     text    = TextField(blank=False, max_length=COMMENT_MAXLEN)
     author  = ForeignKey(User, related_name='author_of')
@@ -98,5 +94,5 @@ class Comment(MPTTModel):
         return '<Comment %r>' % (self.text[:25])
 
     def __str__(self):
-        return u'{} by {}'.format(self.text[:25], self.author)
+        return '{} by {}'.format(self.text[:25], self.author)
 
