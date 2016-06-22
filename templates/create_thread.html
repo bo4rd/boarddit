@@ -1,8 +1,8 @@
-{% extends "base.html" %}
+{% extends "base_subreddit.html" %}
 
 {% block title %}MIPT board{% endblock %}
 
-{% block content %}
+{% block inner_content %}
     <div class="page-header">
         <h1>Создать новый тред</h1>
     </div>
@@ -14,7 +14,7 @@
     </div>
     {% endif %}
 
-    <form method="POST" action="{% url 'create_thread' %}" role="form" class="form-horizontal">
+    <form method="POST" action="{% url 'create_thread' current_subreddit.id current_subreddit.slug %}" role="form" class="form-horizontal">
         {% csrf_token %}
         <div class="form-group">
             <label class="control-label col-sm-2" for="{{ form.title.id_for_label }}">Название треда:</label>

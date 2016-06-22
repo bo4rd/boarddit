@@ -1,0 +1,14 @@
+{% extends "base_subreddit.html" %}
+
+{% block title %}
+Boarddit{% if current_subreddit %} - {{ current_subreddit.title }}{% endif %}
+{% endblock %}
+
+{% block inner_content %}
+<div class="row">
+    {% for thread in threads %}
+    <h2><a href="{{ thread.real_url }}">{{ thread.title }}</a></h2>
+    <a href="{{ thread.permalink }}">Комментариев: {{ thread.get_comment_number }}</a>, создан {{ thread.created_on }}
+    {% endfor %}
+</div>
+{% endblock %}

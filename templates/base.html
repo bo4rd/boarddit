@@ -5,10 +5,7 @@
 <html>
         <head>
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
-            <title>
-                {% block title %}
-                {% endblock %}
-            </title>
+            <title>{% block title %}{% endblock %}</title>
             {% bootstrap_styles theme='default' type='css' %}
             {% bootstrap_script use_min=False %}
             <script type="text/javascript" src="{% static 'js/csrf.js' %}"></script>
@@ -18,9 +15,27 @@
       <nav class="navbar navbar-default">
         <div class="container-fluid">
           <div class="navbar-header">
-            <a class="navbar-brand" href="{% url 'apps.reddit.views.index' %}">Boarddit</a>
+            <a class="navbar-brand" href="{% url 'index' %}">Boarddit</a>
           </div>
           <ul class="nav navbar-nav">
+              {% if subreddits %}
+              <li class="dropdown {% if current_subreddit %}active{% endif %}">
+                  <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                      {% if current_subreddit %}
+                      {{ current_subreddit.short_title }}
+                      {% else %}
+                      Субреддиты
+                      {% endif %}
+                  <span class="caret"></span></a>
+                  <ul class="dropdown-menu">
+                      <li><a href='{% url 'index' %}'>Все субреддиты<a/></li>
+                      <li class="divider"></li>
+                      {% for subreddit in subreddits %}
+                      <li><a href="{% url 'show_subreddit' subreddit.id subreddit.slug %}">{{ subreddit.short_title }}</a></li>
+                      {% endfor %}
+                  </ul>
+              </li>
+              {% endif %}
               <li><a href="/admin/">Admin</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">

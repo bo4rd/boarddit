@@ -28,7 +28,7 @@
 <h2>Созданные треды</h2>
 {% for thread in threads %}
 <p>
-    <a href="{% url 'thread' thread.id %}">{{ thread.title }}</a>
+    <a href="{{ thread.permalink }}">{{ thread.title }}</a>
     <span class='text-muted'>{{ thread.created_on }}</span>
 </p>
 {% endfor %}

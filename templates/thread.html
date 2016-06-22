@@ -1,9 +1,9 @@
-{% extends "base_with_sidemenu.html" %}
+{% extends "base_subreddit.html" %}
 {% load mptt_tags %}
 
 {% block title %}MIPT board{% endblock %}
 
-{% block sidecontent %}
+{% block inner_content %}
     <div class="page-header">
         <h1>
             {% if thread.url %}
@@ -45,6 +45,7 @@
                 '<button class="btn btn-primary">Отправить</button>' +
                 '</div>';
             var loading_msg = '<div class="bg-info">Loading...</div>';
+            var post_url = '{{ thread.permalink|escapejs }}';
 
             function process_reply(parent_div) {
                 var reply_div = parent_div.children('div.reply-form');
@@ -60,7 +61,7 @@
                         parent_id = parent_div.attr('id');
                     }
 
-                    $.post('{{ thread.permalink|escapejs }}',
+                    $.post(post_url,
                            {
                                text: comment_text,
                                ancestor: parent_id

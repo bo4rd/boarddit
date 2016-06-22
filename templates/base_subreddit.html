@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-9">
+        {% block inner_content %}{% endblock %}
+    </div>
+    <div class="col-lg-3">
+        <div class="panel panel-default">
+            {% if current_subreddit %}
+            <div class="panel-heading">{{ current_subreddit.title }}</div>
+            <div class="panel-body">
+                <h5>Описание:</h5>
+                <p>{{ current_subreddit.desc }}</p>
+                <a href="{% url 'create_thread' current_subreddit.id current_subreddit.slug %}" class="btn btn-default">Создать тред</a><br><br>
+            </div>
+            {% else %}
+            <div class="panel-heading">Все сообщества</div>
+            <div class="panel-body">bla bla bla</div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
