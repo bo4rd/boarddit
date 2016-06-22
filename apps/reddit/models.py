@@ -96,3 +96,6 @@ class Comment(MPTTModel):
     def __str__(self):
         return '{} by {}'.format(self.text[:25], self.author)
 
+    @property
+    def comment_level(self):
+        return len(self.get_ancestors())

@@ -1,5 +1,6 @@
 {% extends "base_subreddit.html" %}
 {% load mptt_tags %}
+{% load comment_align %}
 
 {% block title %}Boarddit - {{ thread.title }}{% endblock %}
 
@@ -14,26 +15,37 @@
         </h1>
         <span class="text-muted">Создан {{ thread.created_on }} пользователем {{ thread.author.get_username }}</span>
 
+        {% if not root_comment %}
         <p style="margin-top: 2em;">{{ thread.text }}</p>
+        {% endif %}
     </div>
+
+    {% if root_comment %}
+    <a href="{% url 'show_thread' current_subreddit.id current_subreddit.slug thread.id thread.slug %}">вернуться к посту</a>
+    {% endif %}
+
 
     {% recursetree nodes %}
     {% if node.thread == thread %}
-        {% if node.get_ancestors|length < 10 %}
-        <div class="row comment-row">
-            <div class="col-lg-offset-{{ node.get_ancestors|length }} col-lg{{ node.get_ancestors|length|add:"-12" }}" id="{{ node.id }}">
-                {{ node.text }}<br>
-                <strong>{{ node.author }}</strong> {{ node.created_on }}
-                <a class="comment_reply" href="#">ответить</a><br>
+        {% if root_comment and root_comment in node.get_descendants %}
+        {{ children }}  {# silently iterate over root_comment parents #}
+        {% else %} {# normal comment display #}
+            {% if node.get_ancestors|length < comment_level %}
+            <div class="row comment-row">
+                <div class="col-lg-offset-{{ node.comment_level|comment_offset:max_level }} col-lg-{{ node.comment_level|comment:max_level }}" id="{{ node.id }}">
+                    {{ node.text }}<br>
+                    <strong>{{ node.author }}</strong> {{ node.created_on }}
+                    <a class="comment_reply" href="#">ответить</a><br>
+                </div>
             </div>
-        </div>
-        {{ children }}
+            {{ children }}
 
-        {% elif node.get_ancestors|length == 10 %}
-        <div class="row">
-            <div class="col-lg-5 bg-info">Часть нити скрыта</div>
-        </div>
-        {% else %}
+            {% elif node.get_ancestors|length == comment_level %}
+            <div class="row">
+                <div class="col-lg-offset-{{ comment_level|comment_notice_offset:max_level }} col-lg-{{ comment_level|comment_notice:max_level }}"><a href="{% url 'comment_tree' current_subreddit.id current_subreddit.slug thread.id thread.slug node.id %}">Показать скрытую ветку</a></div>
+            </div>
+            {% else %}
+            {% endif %}
         {% endif %}
     {% endif %}
     {% endrecursetree %}
@@ -79,9 +91,11 @@
                 });
             }
 
+            {% if not root_comment %}
             // Root comments
             $("div.page-header").append('<div class="root-comment"><h4>Прокомментировать</h4>' + reply_form + '</div>');
             process_reply($("div.root-comment"));
+            {% endif %}
 
             // Replies to comments
             $("a.comment_reply").click(function() {

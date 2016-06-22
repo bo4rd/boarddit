@@ -5,14 +5,21 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, HttpResponseForbidden, HttpResponseServerError, HttpResponse
 from .forms import ThreadSubmitForm
 
+MAX_COMMENT_LEVEL = 7
+
 def index(request):
     return render(request, 'thread_list.html', {'threads': Thread.objects.all(),
                                                 'subreddits': Subreddit.objects.all()})
 
 
-def show_thread(request, subreddit_id, subreddit_slug, thread_id, thread_slug):
+def show_thread(request, subreddit_id, subreddit_slug, thread_id, thread_slug, comment_id=None):
     thread = get_object_or_404(Thread, id=thread_id)
     subreddit = get_object_or_404(Subreddit, id=subreddit_id)
+    if comment_id:
+        root_comment = get_object_or_404(Comment, id=comment_id)
+        top_comment_level = len(root_comment.get_ancestors()) + MAX_COMMENT_LEVEL
+    else:
+        top_comment_level = MAX_COMMENT_LEVEL
 
     if request.method == 'POST':
         if not request.user.is_authenticated():
@@ -30,10 +37,15 @@ def show_thread(request, subreddit_id, subreddit_slug, thread_id, thread_slug):
             return HttpResponse(status=500)
         return HttpResponse(status=200)
     else:
-        return render(request, 'thread.html', {'subreddits': Subreddit.objects.all(),
-                                               'current_subreddit': subreddit,
-                                               'thread': thread,
-                                               'nodes': Comment.objects.all()})
+        template_params = {'subreddits': Subreddit.objects.all(),
+                           'current_subreddit': subreddit,
+                           'thread': thread,
+                           'nodes': Comment.objects.all(),
+                           'comment_level': top_comment_level,
+                           'max_level': MAX_COMMENT_LEVEL}
+        if comment_id:
+            template_params['root_comment'] = root_comment
+        return render(request, 'thread.html', template_params)
 
 
 @login_required
