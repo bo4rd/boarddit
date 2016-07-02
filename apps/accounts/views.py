@@ -38,6 +38,8 @@ def user_profile(request, username):
     user = get_object_or_404(User, username=username)
     user_threads = Thread.objects.filter(author=user).order_by('-created_on')[:5]
     comment_num = Comment.objects.filter(author=user).count()
-    return render(request, 'profile.html', {'profile_user': user, 'threads':
-                                            user_threads, 'comment_num':
-                                            comment_num})
+    user_comments = Comment.objects.filter(author=user).order_by('-created_on')[:5]
+    return render(request, 'profile.html', {'profile_user': user,
+                                            'threads': user_threads,
+                                            'comment_num': comment_num,
+                                            'comments': user_comments})

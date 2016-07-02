@@ -10,6 +10,7 @@ DESC_MAXLEN = 4096
 COMMENT_MAXLEN = DESC_MAXLEN
 URL_MAXLEN = 1024
 SHORT_NAME_LEN = 20
+SHORT_COMMENT_LEN = 128
 
 class Subreddit(Model):
     title = TextField(blank=False, max_length=TITLE_MAXLEN, unique=True)
@@ -67,10 +68,10 @@ class Thread(Model):
 
     @property
     def permalink(self):
-        return reverse('apps.reddit.views.show_thread', kwargs={'thread_id': self.id,
-                                                                'thread_slug': self.slug,
-                                                                'subreddit_id': self.subreddit.id,
-                                                                'subreddit_slug': self.subreddit.slug})
+        return reverse('show_thread', kwargs={'thread_id': self.id,
+                                              'thread_slug': self.slug,
+                                              'subreddit_id': self.subreddit.id,
+                                              'subreddit_slug': self.subreddit.slug})
 
 
 class Comment(MPTTModel):
@@ -96,3 +97,11 @@ class Comment(MPTTModel):
     @property
     def comment_level(self):
         return len(self.get_ancestors())
+
+    @property
+    def short_text(self):
+        if len(self.text) > (SHORT_COMMENT_LEN - 3):
+            st = self.text[:SHORT_COMMENT_LEN - 3] + '...'
+        else:
+            st = self.text
+        return st

@@ -2,10 +2,35 @@
     margin-top: 1em;
     margin-bottom: 1em;
 }
+
 .comment-row {
     margin-top: 1em;
     margin-bottom: 1em;
 }
-.root-comment {
-    margin-top: 3em;
+
+.comment-area {
+    background-color: #f7f7f7;
+}
+
+.comment-area span {
+    margin-left: 0.5em;
+}
+
+.subreddit-desc {
+    margin-bottom: 2em;
+}
+
+.thread-list-spacings {
+    margin-bottom: 1em;
+}
+
+.profile-button-menu {
+    margin-top: 1em;
+    margin-bottom: 1em;
+    margin-left: 1em;
+}
+
+.alert-spacing {
+    margin-top: 2em;
+    margin-bottom: 2em;
 }

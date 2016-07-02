@@ -3,13 +3,19 @@
 {% block title %}Профиль пользователя {{ profile_user.get_username }}{% endblock %}
 
 {% block content %}
+
 <div class="page-header">
     <h1>Профиль пользователя <strong>{{ profile_user.get_username }}</strong></h1>
 </div>
+{% if user.is_superuser %}
+<div class="row profile-button-menu">
+    <a href="{% url 'admin:index' %}" class="btn btn-danger">Админка</a>
+</div>
+{% endif %}
 {% if user.is_authenticated %}
 <div class="row">
     <div class="col-lg-3"><strong>Электронная почта:</strong></div>
-    <div class="col-lg-9">{{ profile_user.email }}</div>
+    <div class="col-lg-9">{{ profile_user.email|urlize }}</div>
 </div>
 {% endif %}
 <div class="row">
@@ -17,7 +23,7 @@
     <div class="col-lg-9">{{ profile_user.date_joined }}</div>
 </div>
 <div class="row">
-    <div class="col-lg-3"><strong>Тредов:</strong></div>
+    <div class="col-lg-3"><strong>Постов:</strong></div>
     <div class="col-lg-9">{{ threads|length }}</div>
 </div>
 <div class="row">
@@ -25,11 +31,21 @@
     <div class="col-lg-9">{{ comment_num }}</div>
 </div>
 
-<h2>Созданные треды</h2>
+<h2>Недавние посты</h2>
 {% for thread in threads %}
 <p>
     <a href="{{ thread.permalink }}">{{ thread.title }}</a>
     <span class='text-muted'>{{ thread.created_on }}</span>
 </p>
 {% endfor %}
+
+<h2>Недавние комментарии</h2>
+{% for comment in comments %}
+<p>
+    {{ comment.short_text }}<br>
+    в <a href="{{ comment.thread.permalink }}">{{ comment.thread.title }}</a>
+    <span class='text-muted'>{{ comment.created_on }}</span>
+</p>
+{% endfor %}
+
 {% endblock %}

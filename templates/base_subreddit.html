@@ -1,25 +1,28 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="row">
-    <div class="col-lg-9">
-        {% block inner_content %}{% endblock %}
-    </div>
-    <div class="col-lg-3">
-        <div class="panel panel-default">
-            {% if current_subreddit %}
-            <div class="panel-heading"><a href="{% url 'show_subreddit' current_subreddit.id current_subreddit.slug %}">{{ current_subreddit.title }}</a></div>
-            <div class="panel-body">
-                <h5>Описание:</h5>
-                <p>{{ current_subreddit.desc }}</p>
-                <h5>Создан {{ current_subreddit.created_on }}</h5>
-                <a href="{% url 'create_thread' current_subreddit.id current_subreddit.slug %}" class="btn btn-default">Создать тред</a>
-            </div>
-            {% else %}
-            <div class="panel-heading">Все сообщества</div>
-            <div class="panel-body">bla bla bla</div>
-            {% endif %}
+<div class="col-lg-9">
+    {% block inner_content %}{% endblock %}
+</div>
+<div class="col-lg-3">
+    <div class="panel panel-default">
+        {% if current_subreddit %}
+        <div class="panel-heading"><h4><strong><a href="{% url 'show_subreddit' current_subreddit.id current_subreddit.slug %}">/r/{{ current_subreddit.title }}</a></strong></h4></div>
+        <div class="panel-body">
+            <h5><strong>Описание:</strong></h5>
+            <p class="subreddit-desc">
+                {{ current_subreddit.desc|urlize|linebreaksbr }}
+            </p>
+            <h5><strong>Дата создания</strong></h5>
+            <p class=subreddit-desc">
+                {{ current_subreddit.created_on }}
+            </p>
+            <a href="{% url 'create_thread' current_subreddit.id current_subreddit.slug %}" class="btn btn-default">Создать пост</a>
         </div>
+        {% else %}
+        <div class="panel-heading"><h4><strong>Все сообщества</strong></h4></div>
+        <div class="panel-body">Здесь собраны посты из всех сообществ. Для создания поста перейдите в нужное сообщество.</div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

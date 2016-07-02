@@ -13,7 +13,7 @@
             {{ thread.title }}
             {% endif %}
         </h1>
-        <span class="text-muted">Создан {{ thread.created_on }} пользователем {{ thread.author.get_username }}</span>
+        <span class="text-muted">Создан {{ thread.created_on }} пользователем <a href="{% url 'user_profile' thread.author.get_username %}">{{ thread.author.get_username }}</a></span>
 
         {% if not root_comment %}
         <p style="margin-top: 2em;">{{ thread.text|urlize|linebreaks }}</p>
@@ -22,6 +22,8 @@
 
     {% if root_comment %}
     <a href="{% url 'show_thread' current_subreddit.id current_subreddit.slug thread.id thread.slug %}">вернуться к посту</a>
+    {% else %}
+    <div class="row" id="root_comment_submit"></div>
     {% endif %}
 
 
@@ -32,10 +34,11 @@
         {% else %} {# normal comment display #}
             {% if node.get_ancestors|length < comment_level %}
             <div class="row comment-row">
-                <div class="col-lg-offset-{{ node.comment_level|comment_offset:max_level }} col-lg-{{ node.comment_level|comment:max_level }} bg-info" id="{{ node.id }}">
+                <div class="col-lg-offset-{{ node.comment_level|comment_offset:max_level }} col-lg-{{ node.comment_level|comment:max_level }} comment-area" id="{{ node.id }}">
                     <p>{{ node.text|urlize|linebreaksbr }}</p>
                     <strong>{{ node.author }}</strong> {{ node.created_on }}
-                    <a class="comment_reply" href="#">ответить</a><br>
+                    <span><a class="comment_reply" href="#">ответить</a></span>
+                    <span><a href="{% url 'comment_tree' current_subreddit.id current_subreddit.slug thread.id thread.slug node.id %}">показать ветку</a></span>
                 </div>
             </div>
             {{ children }}
@@ -53,7 +56,7 @@
     <script>
         $(document).ready(function() {
             var reply_form = '<div class="reply-form">' +
-                '<textarea class="form-control"></textarea>' +
+                '<textarea class="form-control"></textarea><br>' +
                 '<button class="btn btn-primary">Отправить</button>' +
                 '</div>';
             var loading_msg = '<div class="bg-info">Loading...</div>';
@@ -93,13 +96,13 @@
 
             {% if not root_comment %}
             // Root comments
-            $("div.page-header").append('<div class="root-comment"><h4>Прокомментировать</h4>' + reply_form + '</div>');
+            $("div#root_comment_submit").append('<div class="root-comment"><h4>Прокомментировать</h4>' + reply_form + '</div>');
             process_reply($("div.root-comment"));
             {% endif %}
 
             // Replies to comments
             $("a.comment_reply").click(function() {
-                var parent_div = $(this).parent();
+                var parent_div = $(this).parent().parent();
 
                 if(parent_div.children('div.reply-form').length > 0) {
                     parent_div.children('div.reply-form').remove();

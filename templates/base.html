@@ -3,14 +3,15 @@
 
 <!doctype html>
 <html>
-        <head>
-            <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
-            <title>{% block title %}{% endblock %}</title>
-            {% bootstrap_styles theme='default' type='css' %}
-            {% bootstrap_script use_min=False %}
-            <script type="text/javascript" src="{% static 'js/csrf.js' %}"></script>
-            <link rel="stylesheet" href="{% static 'css/custom.css' %}">
-        </head>
+    <head>
+        <meta charset="utf-8">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+        <title>{% block title %}{% endblock %}</title>
+        {% bootstrap_styles theme='default' type='css' %}
+        {% bootstrap_script use_min=False %}
+        <script type="text/javascript" src="{% static 'js/csrf.js' %}"></script>
+        <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+    </head>
 <body>
       <nav class="navbar navbar-default">
         <div class="container-fluid">
@@ -24,11 +25,11 @@
                       {% if current_subreddit %}
                       {{ current_subreddit.short_title }}
                       {% else %}
-                      Субреддиты
+                      Сообщества
                       {% endif %}
                   <span class="caret"></span></a>
                   <ul class="dropdown-menu">
-                      <li><a href='{% url 'index' %}'>Все субреддиты<a/></li>
+                      <li><a href='{% url 'index' %}'>Все сообщества<a/></li>
                       <li class="divider"></li>
                       {% for subreddit in subreddits %}
                       <li><a href="{% url 'show_subreddit' subreddit.id subreddit.slug %}">{{ subreddit.short_title }}</a></li>
@@ -36,14 +37,12 @@
                   </ul>
               </li>
               {% endif %}
-              <li><a href="/admin/">Admin</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
               {% if user.is_authenticated %}
-              <li><a href="{% url 'user_profile' user.get_username %}"><strong>{{ user }}</strong></a></li>
+              <li class="{% if profile_user %}active{% endif %}"><a href="{% url 'user_profile' user.get_username %}"><strong>{{ user }}</strong></a></li>
                   <li><a href="{% url 'logout' %}">Выйти</a></li>
               {% else %}
-                  <li><a href="{% url 'register' %}">Зарегистрироваться</a></li>
                   <li><a href="{% url 'login' %}">Войти</a></li>
               {% endif %}
           </ul>
