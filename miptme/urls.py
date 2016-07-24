@@ -7,6 +7,7 @@ thread_patterns = [
     url(r'^$', reddit_views.show_thread, name='show_thread'),
     url(r'comment_tree/(?P<comment_id>[0-9]+)/$',
         reddit_views.show_thread, name='comment_tree'),
+    url(r'^vote/$', reddit_views.vote_on_thread, name='vote_thread'),
 ]
 
 subreddit_patterns = [
@@ -24,5 +25,5 @@ urlpatterns = [
     url(r'^register/$', accounts_views.register, name='register'),
     url(r'^user/(?P<username>[a-zA-Z0-9]+)/$', accounts_views.user_profile, name='user_profile'),
     url(r'^r/(?P<subreddit_id>[0-9]+)/(?P<subreddit_slug>[a-zA-Z0-9_\~\-\']+)/',
-        include(subreddit_patterns))
+        include(subreddit_patterns)),
 ]

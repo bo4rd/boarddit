@@ -34,3 +34,16 @@
     margin-top: 2em;
     margin-bottom: 2em;
 }
+
+.vote-up-button {
+}
+.vote-down-button {
+}
+
+.disabled {
+    color: grey;
+}
+
+.thread-icon {
+    margin-right: 0.5em;
+}

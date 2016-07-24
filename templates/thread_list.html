@@ -1,22 +1,51 @@
 {% extends "base_subreddit.html" %}
 {% load humanize %}
+{% load bootstrap3 %}
 
 {% block title %}
 Boarddit{% if current_subreddit %} - {{ current_subreddit.title }}{% endif %}
 {% endblock %}
 
 {% block inner_content %}
-    {% for thread in threads reversed %}
-    <div class="row thread-list-spacings">
-        <h2>
-            <a href="{{ thread.real_url }}">{{ thread.title }}</a><br>
-            {% if not current_subreddit %}
-            <small>в сообществе <a href="{% url 'show_subreddit' thread.subreddit.id thread.subreddit.slug %}">"{{ thread.subreddit.title }}"</a></small>
-            {% endif %}
-        </h2>
-        <a href="{{ thread.permalink }}">Комментариев: {{ thread.get_comment_number }}</a>,
-        создан {{ thread.created_on|naturaltime }}
-        пользователем <a href="{% url 'user_profile' thread.author.get_username %}">{{ thread.author }}</a>
+{% for thread in threads reversed %}
+<div class="row thread-list-spacings">
+    <div class="row">
+        <div class="col-lg-1 text-center vote-section" data-update-url="{{ thread.permalink }}">
+            <h3><a href="#" class="btn btn-link btn-xs {% if not user.is_authenticated or user in thread.voters.all %}disabled{% endif %} vote-up-button">{% bootstrap_icon "chevron-up" %}</span></a><br>
+
+            <span class="vote-number">{{ thread.voters.all.count }}</span><br>
+
+            <a href="#" class="btn btn-link btn-xs {% if not user.is_authenticated or user not in thread.voters.all %}disabled{% endif %} vote-down-button">{% bootstrap_icon "chevron-down" %}</a></h3>
+        </div>
+        <div class="col-lg-11">
+            <h2>
+                <small class="thread-icon">
+                {% if thread.url_type == "selfpost" %}
+                {% bootstrap_icon "pencil" %}
+                {% elif thread.url_type == "image" %}
+                {% bootstrap_icon "picture" %}
+                {% elif thread.url_type == "url" %}
+                {% bootstrap_icon "link" %}
+                {% endif %}
+                </small>
+
+                <a href="{{ thread.real_url }}">{{ thread.title }}</a><br>
+                {% if not current_subreddit %}
+                <small>в сообществе <a href="{% url 'show_subreddit' thread.subreddit.id thread.subreddit.slug %}">"{{ thread.subreddit.title }}"</a></small>
+                {% endif %}
+            </h2>
+            <a href="{{ thread.permalink }}">Комментариев: {{ thread.get_comment_number }}</a>,
+            создан {{ thread.created_on|naturaltime }}
+            пользователем <a href="{% url 'user_profile' thread.author.get_username %}">{{ thread.author }}</a>
+        </div>
     </div>
-    {% endfor %}
+</div>
+{% endfor %}
+
+<script>
+$(document).ready(function() {
+    init_thread_voting();
+})
+</script>
+
 {% endblock %}

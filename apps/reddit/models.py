@@ -4,6 +4,7 @@ from django.core.urlresolvers import reverse
 from django.utils.http import urlquote
 from mptt.models import MPTTModel, TreeForeignKey
 from slugify import slugify
+import re
 
 TITLE_MAXLEN = 128
 DESC_MAXLEN = 4096
@@ -45,7 +46,7 @@ class Thread(Model):
     subreddit = ForeignKey(Subreddit, blank=True, null=True)
 
     created_on = DateTimeField(auto_now_add=True)
-    votes = IntegerField(default=1)
+    voters = ManyToManyField(User, related_name='voted_thread')
 
     def __str__(self):
         short_text = self.title if len(self.title) < 20 else self.title[:18] + '...'
@@ -72,6 +73,16 @@ class Thread(Model):
                                               'thread_slug': self.slug,
                                               'subreddit_id': self.subreddit.id,
                                               'subreddit_slug': self.subreddit.slug})
+
+    @property
+    def url_type(self):
+        is_image = re.search(r'\.(jpg|jpeg|png|gif|gifv|bmp|tiff|tif)$', self.url, flags=re.IGNORECASE)
+        if not self.url:
+            return 'selfpost'
+        elif is_image:
+            return 'image'
+        else:
+            return 'url'
 
 
 class Comment(MPTTModel):

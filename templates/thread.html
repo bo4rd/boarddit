@@ -1,19 +1,33 @@
 {% extends "base_subreddit.html" %}
 {% load mptt_tags %}
 {% load comment_align %}
+{% load bootstrap3 %}
 
 {% block title %}Boarddit - {{ thread.title }}{% endblock %}
 
 {% block inner_content %}
     <div class="page-header">
-        <h1>
-            {% if thread.url %}
-            <a href="{{ thread.real_url }}">{{ thread.title }}</a>
-            {% else %}
-            {{ thread.title }}
-            {% endif %}
-        </h1>
-        <span class="text-muted">Создан {{ thread.created_on }} пользователем <a href="{% url 'user_profile' thread.author.get_username %}">{{ thread.author.get_username }}</a></span>
+        <div class="row">
+            <div class="col-lg-1 text-center vote-section" data-update-url="{{ thread.permalink }}">
+                <h3>
+                <a href="#" class="btn btn-link btn-xs {% if not user.is_authenticated or user in thread.voters.all %}disabled{% endif %} vote-up-button">{% bootstrap_icon "chevron-up" %}</span></a><br>
+
+                <span class="vote-number">{{ thread.voters.all.count }}</span><br>
+
+                <a href="#" class="btn btn-link btn-xs {% if not user.is_authenticated or user not in thread.voters.all %}disabled{% endif %} vote-down-button">{% bootstrap_icon "chevron-down" %}</a>
+                </h3>
+            </div>
+            <div class="col-lg-11">
+            <h1>
+                {% if thread.url %}
+                <a href="{{ thread.real_url }}">{{ thread.title }}</a>
+                {% else %}
+                {{ thread.title }}
+                {% endif %}
+            </h1>
+            <span class="text-muted">Создан {{ thread.created_on }} пользователем <a href="{% url 'user_profile' thread.author.get_username %}">{{ thread.author.get_username }}</a></span>
+            </div>
+        </div>
 
         {% if not root_comment %}
         <p style="margin-top: 2em;">{{ thread.text|urlize|linebreaks }}</p>
@@ -55,6 +69,8 @@
 
     <script>
         $(document).ready(function() {
+            init_thread_voting();
+
             var reply_form = '<div class="reply-form">' +
                 '<textarea class="form-control"></textarea><br>' +
                 '<button class="btn btn-primary">Отправить</button>' +

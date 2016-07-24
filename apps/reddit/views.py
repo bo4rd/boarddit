@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from .models import Thread, Comment, Subreddit
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect, HttpResponseForbidden, HttpResponseServerError, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponseForbidden, HttpResponseServerError, HttpResponse, JsonResponse
 from .forms import ThreadSubmitForm
 
 MAX_COMMENT_LEVEL = 7
@@ -10,6 +10,14 @@ MAX_COMMENT_LEVEL = 7
 def index(request):
     return render(request, 'thread_list.html', {'threads': Thread.objects.all(),
                                                 'subreddits': Subreddit.objects.all()})
+
+
+def show_subreddit(request, subreddit_id, subreddit_slug):
+    subreddit = get_object_or_404(Subreddit, id=subreddit_id)
+    threads = Thread.objects.filter(subreddit=subreddit)
+    return render(request, 'thread_list.html', {'subreddits': Subreddit.objects.all(),
+                                                'current_subreddit': subreddit,
+                                                'threads': threads})
 
 
 def show_thread(request, subreddit_id, subreddit_slug, thread_id, thread_slug, comment_id=None):
@@ -69,9 +77,17 @@ def create_thread(request,subreddit_id, subreddit_slug):
                                                   'form': form})
 
 
-def show_subreddit(request, subreddit_id, subreddit_slug):
-    subreddit = get_object_or_404(Subreddit, id=subreddit_id)
-    threads = Thread.objects.filter(subreddit=subreddit)
-    return render(request, 'thread_list.html', {'subreddits': Subreddit.objects.all(),
-                                                'current_subreddit': subreddit,
-                                                'threads': threads})
+@login_required
+def vote_on_thread(request, subreddit_id, subreddit_slug, thread_id, thread_slug):
+    is_next_up = False
+    if request.method == 'POST':
+        thread = get_object_or_404(Thread, id=thread_id)
+        if request.user in thread.voters.all():
+            thread.voters.remove(request.user)
+            is_next_up = True
+        else:
+            thread.voters.add(request.user)
+            is_next_up = False
+        thread.save()
+
+    return JsonResponse({'votes': thread.voters.all().count(), 'next_up': is_next_up})
