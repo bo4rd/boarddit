@@ -12,7 +12,8 @@
     background-color: #f7f7f7;
 }
 
-.comment-area span {
+/*.comment-area span {*/
+.comment-links {
     margin-left: 0.5em;
 }
 
@@ -35,11 +36,7 @@
     margin-bottom: 2em;
 }
 
-.vote-up-button {
-}
-.vote-down-button {
-}
-
+/* For voting */
 .disabled {
     color: grey;
 }

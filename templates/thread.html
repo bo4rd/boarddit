@@ -8,13 +8,13 @@
 {% block inner_content %}
     <div class="page-header">
         <div class="row">
-            <div class="col-lg-1 text-center vote-section" data-update-url="{{ thread.permalink }}">
+            <div class="col-lg-1 text-center vote-section" data-update-url="{{ thread.vote_url }}">
                 <h3>
-                <a href="#" class="btn btn-link btn-xs {% if not user.is_authenticated or user in thread.voters.all %}disabled{% endif %} vote-up-button">{% bootstrap_icon "chevron-up" %}</span></a><br>
+                <a href="#" class="btn btn-link btn-xs {% if not user.is_authenticated or user in thread.voters.all %}disabled{% endif %} vote-up-thread">{% bootstrap_icon "chevron-up" %}</span></a><br>
 
                 <span class="vote-number">{{ thread.voters.all.count }}</span><br>
 
-                <a href="#" class="btn btn-link btn-xs {% if not user.is_authenticated or user not in thread.voters.all %}disabled{% endif %} vote-down-button">{% bootstrap_icon "chevron-down" %}</a>
+                <a href="#" class="btn btn-link btn-xs {% if not user.is_authenticated or user not in thread.voters.all %}disabled{% endif %} vote-down-thread">{% bootstrap_icon "chevron-down" %}</a>
                 </h3>
             </div>
             <div class="col-lg-11">
@@ -50,9 +50,18 @@
             <div class="row comment-row">
                 <div class="col-lg-offset-{{ node.comment_level|comment_offset:max_level }} col-lg-{{ node.comment_level|comment:max_level }} comment-area" id="{{ node.id }}">
                     <p>{{ node.text|urlize|linebreaksbr }}</p>
-                    <strong>{{ node.author }}</strong> {{ node.created_on }}
-                    <span><a class="comment_reply" href="#">ответить</a></span>
-                    <span><a href="{% url 'comment_tree' current_subreddit.id current_subreddit.slug thread.id thread.slug node.id %}">показать ветку</a></span>
+
+                    <span class="vote-section" style="margin-right: 0.5em;" data-update-url="{{ node.vote_url }}">
+                        <span>
+                            <a href="#" class="btn btn-link btn-xs {% if not user.is_authenticated or user in node.voters.all %}disabled{% endif %} vote-up-comment">{% bootstrap_icon "chevron-up" %}</a>
+                            <span class="vote-number">{{ node.voters.all.count }}</span>
+                            <a href="#" class="btn btn-link btn-xs {% if not user.is_authenticated or user not in node.voters.all %}disabled{% endif %} vote-down-comment">{% bootstrap_icon "chevron-down" %}</a>
+                        </span>
+                    </span>
+
+                    от <strong>{{ node.author }}</strong> {{ node.created_on }}
+                    <span class="comment-links"><a class="comment_reply" href="#">ответить</a></span>
+                    <span class="comment-links"><a href="{% url 'comment_tree' current_subreddit.id current_subreddit.slug thread.id thread.slug node.id %}">показать ветку</a></span>
                 </div>
             </div>
             {{ children }}
@@ -70,6 +79,7 @@
     <script>
         $(document).ready(function() {
             init_thread_voting();
+            init_comment_voting();
 
             var reply_form = '<div class="reply-form">' +
                 '<textarea class="form-control"></textarea><br>' +

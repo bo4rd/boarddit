@@ -76,18 +76,24 @@ def create_thread(request,subreddit_id, subreddit_slug):
                                                   'current_subreddit': subreddit,
                                                   'form': form})
 
+def vote(request, entity_type, entity_id):
+    is_next_up = False
+    if request.method == 'POST':
+        entity = get_object_or_404(entity_type, id=entity_id)
+        if request.user in entity.voters.all():
+            entity.voters.remove(request.user)
+            is_next_up = True
+        else:
+            entity.voters.add(request.user)
+            is_next_up = False
+        entity.save()
+
+    return JsonResponse({'votes': entity.voters.all().count(), 'next_up': is_next_up})
+
+@login_required
+def vote_on_comment(request, subreddit_id, subreddit_slug, thread_id, thread_slug, comment_id):
+    return vote(request, Comment, comment_id)
 
 @login_required
 def vote_on_thread(request, subreddit_id, subreddit_slug, thread_id, thread_slug):
-    is_next_up = False
-    if request.method == 'POST':
-        thread = get_object_or_404(Thread, id=thread_id)
-        if request.user in thread.voters.all():
-            thread.voters.remove(request.user)
-            is_next_up = True
-        else:
-            thread.voters.add(request.user)
-            is_next_up = False
-        thread.save()
-
-    return JsonResponse({'votes': thread.voters.all().count(), 'next_up': is_next_up})
+    return vote(request, Thread, thread_id)

@@ -8,6 +8,8 @@ thread_patterns = [
     url(r'comment_tree/(?P<comment_id>[0-9]+)/$',
         reddit_views.show_thread, name='comment_tree'),
     url(r'^vote/$', reddit_views.vote_on_thread, name='vote_thread'),
+    url(r'^comment/(?P<comment_id>[0-9]+)/vote/$',
+        reddit_views.vote_on_comment, name='vote_comment'),
 ]
 
 subreddit_patterns = [

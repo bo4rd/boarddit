@@ -84,6 +84,13 @@ class Thread(Model):
         else:
             return 'url'
 
+    @property
+    def vote_url(self):
+        return reverse('vote_thread', kwargs={'thread_id': self.id,
+                                              'thread_slug': self.slug,
+                                              'subreddit_id': self.subreddit.id,
+                                              'subreddit_slug': self.subreddit.slug})
+
 
 class Comment(MPTTModel):
     text    = TextField(blank=False, max_length=COMMENT_MAXLEN)
@@ -94,10 +101,10 @@ class Comment(MPTTModel):
     created_on = DateTimeField(auto_now_add=True)
     updated_on = DateTimeField(auto_now=True)
 
-    votes = IntegerField(default=1)
+    voters = ManyToManyField(User, related_name='voted_comment')
 
     class MPTTMeta:
-        order_insertion_by = ['votes']
+        order_insertion_by = ['created_on']
 
     def __repr__(self):
         return '<Comment %r>' % (self.text[:25])
@@ -116,3 +123,11 @@ class Comment(MPTTModel):
         else:
             st = self.text
         return st
+
+    @property
+    def vote_url(self):
+        return reverse('vote_comment', kwargs={'thread_id': self.thread.id,
+                                               'thread_slug': self.thread.slug,
+                                               'subreddit_id': self.thread.subreddit.id,
+                                               'subreddit_slug': self.thread.subreddit.slug,
+                                               'comment_id': self.id})

@@ -10,12 +10,12 @@ Boarddit{% if current_subreddit %} - {{ current_subreddit.title }}{% endif %}
 {% for thread in threads reversed %}
 <div class="row thread-list-spacings">
     <div class="row">
-        <div class="col-lg-1 text-center vote-section" data-update-url="{{ thread.permalink }}">
-            <h3><a href="#" class="btn btn-link btn-xs {% if not user.is_authenticated or user in thread.voters.all %}disabled{% endif %} vote-up-button">{% bootstrap_icon "chevron-up" %}</span></a><br>
+        <div class="col-lg-1 text-center vote-section" data-update-url="{{ thread.vote_url }}">
+            <h3><a href="#" class="btn btn-link btn-xs {% if not user.is_authenticated or user in thread.voters.all %}disabled{% endif %} vote-up-thread">{% bootstrap_icon "chevron-up" %}</span></a><br>
 
             <span class="vote-number">{{ thread.voters.all.count }}</span><br>
 
-            <a href="#" class="btn btn-link btn-xs {% if not user.is_authenticated or user not in thread.voters.all %}disabled{% endif %} vote-down-button">{% bootstrap_icon "chevron-down" %}</a></h3>
+            <a href="#" class="btn btn-link btn-xs {% if not user.is_authenticated or user not in thread.voters.all %}disabled{% endif %} vote-down-thread">{% bootstrap_icon "chevron-down" %}</a></h3>
         </div>
         <div class="col-lg-11">
             <h2>
