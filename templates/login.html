@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load bootstrap3 %}
 
 {% block title %}Boarddit - войти{% endblock %}
 
@@ -9,9 +10,7 @@
 </div>
 
 {% if form.errors %}
-<div class="row alert-spacing">
-    <span class="alert alert-danger">Неправильный логин и/или пароль!</span>
-</div>
+{% bootstrap_alert "Неправильный логин и/или пароль!" alert_type="danger" %}
 {% endif %}
 
 <div class="row">
@@ -32,13 +31,13 @@
     <div class="form-group col-sm-offset-2 col-sm-10">
         <div class="col-sm-offset-2 col-sm-10">
             <input type="submit" value="Войти" class="btn btn-primary">
+            {% if next %}
             <input type="hidden" name="next" value="{{ next }}">
+            {% endif %}
             <a href="{% url 'register' %}" class="btn btn-default">Зарегистрироваться</a>
         </div>
     </div>
 </form>
 </div>
-<!--<div class="row">-->
-    <!--<p>Нет аккаунта? Зарегистрироваться можно <a href="{% url 'register' %}">здесь</a>.</p>-->
-<!--</div>-->
+
 {% endblock %}

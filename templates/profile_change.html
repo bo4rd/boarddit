@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% load bootstrap3 %}
+
+{% block title %}Изменить профиль пользователя {{ user.get_username }}{% endblock %}
+
+{% block content %}
+
+<div class="page-header">
+    <h1>Изменить профиль пользователя <strong>{{ user.get_username }}</strong></h1>
+</div>
+
+{% if form_profile.errors %}
+{% bootstrap_alert "Ошибка при редактировании профиля!" alert_type="danger" %}
+{% elif form_profile.is_bound %}
+{% bootstrap_alert "Данные успешно обновлены!" alert_type="success" %}
+{% endif %}
+
+<div class="row">
+<form method="POST" action="{% url 'change_profile' user.get_username %}" role="form" class="form-horizontal">
+    {% csrf_token %}
+    {% for field in form_profile %}
+    <div class="form-group">
+        <label class="control-label col-sm-2" for="{{ field.id_for_label }}">
+            {{ field.label_tag }}
+        </label>
+        <div class="col-sm-10">
+            {{ field }}
+            {% if field.help_text %}
+            <br>{{ field.help_text }}
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+    <div class="form-group col-sm-offset-2 col-sm-10">
+        <div class="col-sm-offset-2 col-sm-10">
+            <input type="submit" value="Сохранить изменения" class="btn btn-primary">
+        </div>
+    </div>
+</form>
+</div>
+
+
+<h2>Изменить пароль</h2>
+
+{% if form_passwd.errors %}
+{% bootstrap_alert "Ошибка при смене пароля!" alert_type="danger" %}
+{% elif form_passwd.is_bound %}
+{% bootstrap_alert "Пароль успешно обновлен!" alert_type="success" %}
+{% endif %}
+
+<div class="row">
+<form method="POST" action="{% url 'change_profile' user.get_username %}" role="form" class="form-horizontal">
+    {% csrf_token %}
+    {% for field in form_passwd %}
+    <div class="form-group">
+        <label class="control-label col-sm-2" for="{{ field.id_for_label }}">
+            {{ field.label_tag }}
+        </label>
+        <div class="col-sm-10">
+            {{ field }}
+            {% if field.help_text %}
+            <br>{{ field.help_text }}
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+    <div class="form-group col-sm-offset-2 col-sm-10">
+        <div class="col-sm-offset-2 col-sm-10">
+            <input type="submit" value="Изменить пароль" class="btn btn-danger">
+        </div>
+    </div>
+</form>
+</div>
+
+
+{% endblock %}
