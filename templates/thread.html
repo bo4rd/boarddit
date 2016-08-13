@@ -59,9 +59,10 @@
                         </span>
                     </span>
 
-                    от <strong>{{ node.author }}</strong> {{ node.created_on }}
+                    от <strong><a href="{% url "user_profile" node.author.get_username %}">{{ node.author }}</a></strong> {{ node.created_on }}
                     <span class="comment-links"><a class="comment_reply" href="#">ответить</a></span>
-                    <span class="comment-links"><a href="{% url 'comment_tree' current_subreddit.id current_subreddit.slug thread.id thread.slug node.id %}">показать ветку</a></span>
+                    {# doesn't work for arbitrary comments yet #}
+                    {# <span class="comment-links"><a href="{% url 'comment_tree' current_subreddit.id current_subreddit.slug thread.id thread.slug node.id %}">показать ветку</a></span> #}
                 </div>
             </div>
             {{ children }}

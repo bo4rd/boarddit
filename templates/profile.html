@@ -11,9 +11,9 @@
 <div class="row profile-button-menu">
     {% if user.get_username == profile_user.get_username %}
     <a href="{% url 'change_profile' user.get_username %}" class="btn btn-primary">Изменить профиль</a>
-    {% endif %}
     {% if user.is_superuser %}
     <a href="{% url 'admin:index' %}" class="btn btn-danger">Админка</a>
+    {% endif %}
     {% endif %}
 </div>
 <div class="row">
