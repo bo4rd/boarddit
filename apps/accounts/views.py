@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib import auth
 from django.http import HttpResponseRedirect, HttpResponseForbidden
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from ..reddit.models import Thread, Comment
 from .forms import ProfileChangeForm
 
@@ -25,7 +25,7 @@ def login(request):
     return render(request, 'login.html', {'form': form, 'next': next_url})
 
 def logout(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         auth.logout(request)
     return HttpResponseRedirect('/')
 

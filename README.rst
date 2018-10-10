@@ -1,23 +1,19 @@
 Boarddit - reddit-style борда МФТИ
 ==================================
 
-Для работы требуются:
+Требуется Python 3.4+. Настройка окружения и установка зависимостей::
 
-- Python 3
-- django >= 1.9, < 2.0
-- django-extensions
-- django-mtpp
-- django-bootstrap3
-- django-bootstrap-themes
-- unicode-slugify
+    virtualenv venv --python=python3
+    . venv/bin/activate
+    python -m pip install -r requirements.txt
 
 Подготовка БД::
 
-    python3 manage.py migrate
+    python manage.py migrate
 
 Запуск тестового сервера::
 
-    python3 manage.py runserver
+    python manage.py runserver
 
 
 Документация по шаблону

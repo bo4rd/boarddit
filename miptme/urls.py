@@ -21,7 +21,7 @@ subreddit_patterns = [
 
 urlpatterns = [
     url(r'^$', reddit_views.index, name='index'),
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^admin/', admin.site.urls),
     url(r'^login/', accounts_views.login, name='login'),
     url(r'^logout/$', accounts_views.logout, name='logout'),
     url(r'^register/$', accounts_views.register, name='register'),

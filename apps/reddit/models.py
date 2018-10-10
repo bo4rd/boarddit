@@ -1,6 +1,6 @@
 from django.db.models import *
 from django.contrib.auth.models import User
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.utils.http import urlquote
 from mptt.models import MPTTModel, TreeForeignKey
 from slugify import slugify
@@ -39,11 +39,11 @@ class Subreddit(Model):
 
 
 class Thread(Model):
-    author = ForeignKey(User)
+    author = ForeignKey(User, CASCADE)
     title = TextField(blank=False, max_length=TITLE_MAXLEN)
     text = TextField(default='', max_length=DESC_MAXLEN)
     url = TextField(default='', max_length=URL_MAXLEN)
-    subreddit = ForeignKey(Subreddit, blank=True, null=True)
+    subreddit = ForeignKey(Subreddit, CASCADE, blank=True, null=True)
 
     created_on = DateTimeField(auto_now_add=True)
     voters = ManyToManyField(User, related_name='voted_thread')
@@ -94,9 +94,9 @@ class Thread(Model):
 
 class Comment(MPTTModel):
     text    = TextField(blank=False, max_length=COMMENT_MAXLEN)
-    author  = ForeignKey(User, related_name='author_of')
-    parent  = TreeForeignKey('self', null=True, blank=True, related_name='children', db_index=True)
-    thread = ForeignKey(Thread)
+    author  = ForeignKey(User, CASCADE, related_name='author_of')
+    parent  = TreeForeignKey('self', CASCADE, null=True, blank=True, related_name='children', db_index=True)
+    thread = ForeignKey(Thread, CASCADE)
 
     created_on = DateTimeField(auto_now_add=True)
     updated_on = DateTimeField(auto_now=True)

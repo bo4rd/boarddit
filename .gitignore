@@ -74,3 +74,6 @@ target/
 #vim
 *.swp
 *.vim
+
+# Virtualenv
+venv/
