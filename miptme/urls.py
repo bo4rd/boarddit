@@ -1,4 +1,4 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import include, url
 from django.contrib import admin
 import apps.reddit.views as reddit_views
 import apps.accounts.views as accounts_views

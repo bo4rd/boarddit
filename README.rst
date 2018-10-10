@@ -4,7 +4,7 @@ Boarddit - reddit-style борда МФТИ
 Для работы требуются:
 
 - Python 3
-- django >= 1.8
+- django >= 1.9, < 2.0
 - django-extensions
 - django-mtpp
 - django-bootstrap3
